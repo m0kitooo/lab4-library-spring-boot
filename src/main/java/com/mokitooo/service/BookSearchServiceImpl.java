@@ -1,8 +1,7 @@
-package com.mokitooo.service.impl;
+package com.mokitooo.service;
 
 import com.mokitooo.model.book.Book;
-import com.mokitooo.repository.BookRepository;
-import com.mokitooo.service.BookSearchService;
+import com.mokitooo.repository.BookRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +10,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BookSearchServiceImpl implements BookSearchService {
-    private final BookRepository bookRepository;
+    private final BookRepositoryImpl bookRepositoryImpl;
 
     @Override
     public List<Book> findByKeyword(String keyword) {
-        return bookRepository.findAll()
+        return bookRepositoryImpl.findAll()
                 .stream()
                 .filter(b -> b.titleContains(keyword))
                 .toList();

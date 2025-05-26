@@ -1,30 +1,29 @@
-package com.mokitooo.service.impl;
+package com.mokitooo.service;
 
 import com.mokitooo.model.book.Book;
-import com.mokitooo.repository.BookRepository;
-import com.mokitooo.service.BookService;
+import com.mokitooo.repository.BookRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    private final BookRepository bookRepository;
+    private final BookRepositoryImpl bookRepositoryImpl;
 
     @Override
     public void registerBook(Book book) {
-        bookRepository.save(book);
+        bookRepositoryImpl.save(book);
     }
 
     @Override
     public void deleteBook(Long bookId) {
-        bookRepository.delete(bookId);
+        bookRepositoryImpl.delete(bookId);
     }
 
     @Override
     public void block(int bookId) {
-        bookRepository
+        bookRepositoryImpl
                 .findById(bookId)
-                .ifPresent(book -> bookRepository.update(book.withNoAvailable()));
+                .ifPresent(book -> bookRepositoryImpl.update(book.withNoAvailable()));
     }
 }

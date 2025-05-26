@@ -1,8 +1,7 @@
-package com.mokitooo.service.impl;
+package com.mokitooo.service;
 
 import com.mokitooo.model.loan.Loan;
-import com.mokitooo.repository.BookLoanRepository;
-import com.mokitooo.service.BookLoanService;
+import com.mokitooo.repository.BookLoanRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,21 +10,21 @@ import static com.mokitooo.model.loan.LoanMapper.LOAN_TO_ACTIVE;
 @Service
 @RequiredArgsConstructor
 public class BookBookLoanServiceImpl implements BookLoanService {
-    private final BookLoanRepository bookLoanRepository;
+    private final BookLoanRepositoryImpl bookLoanRepositoryImpl;
 
     @Override
     public void borrowBook(Loan loan) {
-        bookLoanRepository.save(loan);
+        bookLoanRepositoryImpl.save(loan);
     }
 
     @Override
     public void returnBook(long loanId) {
-        bookLoanRepository.update(bookLoanRepository.findById(loanId).withInactive());
+        bookLoanRepositoryImpl.update(bookLoanRepositoryImpl.findById(loanId).withInactive());
     }
 
     @Override
     public boolean areAllBooksReturned(Loan loan) {
-        return bookLoanRepository
+        return bookLoanRepositoryImpl
                 .findAll()
                 .stream()
                 .noneMatch(LOAN_TO_ACTIVE::apply);

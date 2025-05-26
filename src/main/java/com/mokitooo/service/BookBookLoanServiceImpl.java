@@ -1,6 +1,7 @@
 package com.mokitooo.service;
 
 import com.mokitooo.dto.BorrowBookDto;
+import com.mokitooo.dto.ReturnBookDto;
 import com.mokitooo.model.book.Book;
 import com.mokitooo.model.loan.Loan;
 import com.mokitooo.repository.BookLoanRepositoryAsyncImpl;
@@ -15,14 +16,14 @@ import static com.mokitooo.model.loan.LoanMapper.LOAN_TO_ACTIVE;
 @Service
 @RequiredArgsConstructor
 public class BookBookLoanServiceImpl implements BookLoanService {
-    private final BookLoanRepositoryAsyncImpl bookLoanRepositoryAsyncImpl;
+    private final BookLoanRepositoryAsyncImpl bookLoanRepository;
     private final BookSearchService bookSearchService;
 
     @Override
     public void borrowBook(BorrowBookDto borrowBookDto) {
         Book bookToBorrow = bookSearchService.findByTitle(borrowBookDto.bookTitle()).getFirst();
 
-        bookLoanRepositoryAsyncImpl.save(
+        bookLoanRepository.save(
                 Loan
                         .builder()
                         .id(UUID.randomUUID())
@@ -35,13 +36,16 @@ public class BookBookLoanServiceImpl implements BookLoanService {
     }
 
     @Override
-    public void returnBook(UUID loanId) {
-        bookLoanRepositoryAsyncImpl.update(bookLoanRepositoryAsyncImpl.findById(loanId).withInactive());
+    public void returnBook(ReturnBookDto returnBookDto) {
+        Book book = bookSearchService.findByTitle(returnBookDto.title()).getFirst();
+        UUID loanId = bookLoanRepository.findById(book.getId()).getId();
+
+        bookLoanRepository.update(bookLoanRepository.findById(loanId).withInactive());
     }
 
     @Override
-    public boolean areAllBooksReturned(Loan loan) {
-        return bookLoanRepositoryAsyncImpl
+    public boolean areAllBooksReturned() {
+        return bookLoanRepository
                 .findAll()
                 .stream()
                 .noneMatch(LOAN_TO_ACTIVE::apply);

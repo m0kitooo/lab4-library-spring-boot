@@ -1,7 +1,7 @@
 package com.mokitooo.service;
 
-import com.mokitooo.dto.DeleteBookDto;
-import com.mokitooo.model.book.Book;
+import com.mokitooo.dto.CreateBookDto;
+import com.mokitooo.dto.BookDto;
 import com.mokitooo.repository.BookRepositoryAsyncImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,22 +11,27 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    private final BookRepositoryAsyncImpl bookRepositoryAsyncImpl;
+    private final BookRepositoryAsyncImpl bookRepository;
+    private final BookSearchService bookSearchService;
 
     @Override
-    public void registerBook(Book book) {
-        bookRepositoryAsyncImpl.save(book);
+    public void registerBook(CreateBookDto createBookDto) {
+        bookRepository.save(createBookDto.toBook());
     }
 
     @Override
-    public DeleteBookDto deleteBook(UUID bookId) {
-        return bookRepositoryAsyncImpl.delete(bookId).toDeleteBookDto();
+    public BookDto deleteBook(String title) {
+        UUID bookId = bookSearchService.findByTitle(title).getFirst().getId();
+
+        return bookRepository.delete(bookId).toBookDto();
     }
 
     @Override
-    public void block(UUID bookId) {
-        bookRepositoryAsyncImpl
+    public void block(String title) {
+        UUID bookId = bookSearchService.findByTitle(title).getFirst().getId();
+
+        bookRepository
                 .findById(bookId)
-                .ifPresent(book -> bookRepositoryAsyncImpl.update(book.withNoAvailable()));
+                .ifPresent(book -> bookRepository.update(book.withNoAvailable()));
     }
 }

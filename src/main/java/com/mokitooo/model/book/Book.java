@@ -1,6 +1,6 @@
 package com.mokitooo.model.book;
 
-import com.mokitooo.dto.DeleteBookDto;
+import com.mokitooo.dto.BookDto;
 import com.mokitooo.model.Author;
 import lombok.*;
 
@@ -43,7 +43,7 @@ public class Book {
         return containsIgnoreCase(this.title, word);
     }
 
-    public DeleteBookDto toDeleteBookDto() {
-        return new DeleteBookDto(author, title, publishDate);
+    public BookDto toBookDto() {
+        return new BookDto(author, title, publishDate);
     }
 }

@@ -1,7 +1,7 @@
 package com.mokitooo;
 
 import com.mokitooo.model.book.Book;
-import com.mokitooo.repository.BookLoanRepositoryImpl;
+import com.mokitooo.repository.BookLoanRepositoryAsyncImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,7 +19,7 @@ public class Lab4LibrarySpringBootApplication {
     CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
             System.out.println(ctx.getBean(Book.class));
-            System.out.println(ctx.getBean(BookLoanRepositoryImpl.class));
+            System.out.println(ctx.getBean(BookLoanRepositoryAsyncImpl.class));
         };
     }
 }

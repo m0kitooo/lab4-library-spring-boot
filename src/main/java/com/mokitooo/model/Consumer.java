@@ -11,7 +11,7 @@ import lombok.ToString;
 public class Consumer {
     @Getter
     @EqualsAndHashCode.Include
-    private final long id;
+    private final Long id;
     private final String name;
     private final String surname;
 }

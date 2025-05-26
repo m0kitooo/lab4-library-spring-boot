@@ -1,17 +1,20 @@
 package com.mokitooo.repository;
 
 import com.mokitooo.model.book.Book;
+import com.mokitooo.util.IdentityGenerator;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 @NoArgsConstructor
-public class BookRepositoryImpl implements BookRepository {
-    private final Map<Long, Book> books = new HashMap<>();
+public class BookRepositoryAsyncImpl implements BookRepository {
+    private final Map<Long, Book> books = new ConcurrentHashMap<>();
+    private final IdentityGenerator identityGenerator = new IdentityGenerator();
 
-    public BookRepositoryImpl(Map<Long, Book> books) {
+    public BookRepositoryAsyncImpl(Map<Long, Book> books) {
         this.books.putAll(books);
     }
 
@@ -27,11 +30,14 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void save(Book book) {
+        if (book.getId() == null) {
+            book.withId(identityGenerator.generate());
+        }
         books.putIfAbsent(book.getId(), book);
     }
 
     @Override
-    public void update(Book book) {
+    public synchronized void update(Book book) {
         if (books.containsKey(book.getId())) {
             books.put(book.getId(), book);
         }

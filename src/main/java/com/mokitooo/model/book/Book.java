@@ -13,7 +13,7 @@ import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
 public class Book {
     @Getter
     @EqualsAndHashCode.Include
-    private final long id;
+    private final Long id;
     private final Author author;
     @NonNull
     final String title;
@@ -26,6 +26,10 @@ public class Book {
 
     public Book withNoAvailable() {
         return new Book(id, author, title, publishDate, false);
+    }
+
+    public Book withId(Long id) {
+        return new Book(id, author, title, publishDate, true);
     }
 
     public boolean titleContains(String word) {

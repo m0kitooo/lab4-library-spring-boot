@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class Author {
     @EqualsAndHashCode.Include
-    private final long id;
+    private final Long id;
     private final String name;
     private final String surname;
 }

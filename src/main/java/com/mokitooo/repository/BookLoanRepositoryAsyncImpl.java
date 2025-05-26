@@ -5,26 +5,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class BookLoanRepositoryImpl implements BookLoanRepository {
-    private final BookRepositoryImpl bookRepositoryImpl;
-    private final ConsumerRepositoryImpl consumerRepositoryImpl;
-    private final Map<Long, Loan> loans = new HashMap<>();
+public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
+    private final BookRepositoryAsyncImpl bookRepositoryAsyncImpl;
+    private final ConsumerRepositoryAsyncImpl consumerRepositoryAsyncImpl;
+    private final Map<Long, Loan> loans = new ConcurrentHashMap<>();
 
     @Autowired
-    public BookLoanRepositoryImpl(BookRepositoryImpl bookRepositoryImpl, ConsumerRepositoryImpl consumerRepositoryImpl) {
-        this.bookRepositoryImpl = bookRepositoryImpl;
-        this.consumerRepositoryImpl = consumerRepositoryImpl;
+    public BookLoanRepositoryAsyncImpl(
+            BookRepositoryAsyncImpl bookRepositoryAsyncImpl,
+            ConsumerRepositoryAsyncImpl consumerRepositoryAsyncImpl
+    ) {
+        this.bookRepositoryAsyncImpl = bookRepositoryAsyncImpl;
+        this.consumerRepositoryAsyncImpl = consumerRepositoryAsyncImpl;
     }
 
-    public BookLoanRepositoryImpl(
+    public BookLoanRepositoryAsyncImpl(
             List<Loan> loans,
-            BookRepositoryImpl bookRepositoryImpl,
-            ConsumerRepositoryImpl consumerRepositoryImpl
+            BookRepositoryAsyncImpl bookRepositoryAsyncImpl,
+            ConsumerRepositoryAsyncImpl consumerRepositoryAsyncImpl
     ) {
-        this.bookRepositoryImpl = bookRepositoryImpl;
-        this.consumerRepositoryImpl = consumerRepositoryImpl;
+        this.bookRepositoryAsyncImpl = bookRepositoryAsyncImpl;
+        this.consumerRepositoryAsyncImpl = consumerRepositoryAsyncImpl;
         loans.forEach(this::save);
     }
 
@@ -53,11 +57,11 @@ public class BookLoanRepositoryImpl implements BookLoanRepository {
     }
 
     private boolean bookExists(Long id) {
-        return bookRepositoryImpl.findById(id).isPresent();
+        return bookRepositoryAsyncImpl.findById(id).isPresent();
     }
 
     private boolean consumerExists(Long id) {
-        return consumerRepositoryImpl.findById(id).isPresent();
+        return consumerRepositoryAsyncImpl.findById(id).isPresent();
     }
 
     private boolean bookAndConsumerExist(Loan loan) {

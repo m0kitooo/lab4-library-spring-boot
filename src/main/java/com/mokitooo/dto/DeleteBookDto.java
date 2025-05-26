@@ -4,7 +4,7 @@ import com.mokitooo.model.Author;
 
 import java.time.LocalDate;
 
-public record CreateBookDto(
+public record DeleteBookDto(
         Author author,
         String title,
         LocalDate publishDate

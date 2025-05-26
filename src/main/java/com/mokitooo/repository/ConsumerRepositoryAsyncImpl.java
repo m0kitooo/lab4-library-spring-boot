@@ -10,14 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Repository
 @NoArgsConstructor
 public class ConsumerRepositoryAsyncImpl implements ConsumerRepository {
-    private final Map<Long, Consumer> consumers = new ConcurrentHashMap<>();
+    private final Map<UUID, Consumer> consumers = new ConcurrentHashMap<>();
 
-    public ConsumerRepositoryAsyncImpl(Map<Long, Consumer> consumers) {
+    public ConsumerRepositoryAsyncImpl(Map<UUID, Consumer> consumers) {
         this.consumers.putAll(consumers);
     }
 
     @Override
-    public Optional<Consumer> findById(long id) {
+    public Optional<Consumer> findById(UUID id) {
         return Optional.ofNullable(consumers.get(id));
     }
 

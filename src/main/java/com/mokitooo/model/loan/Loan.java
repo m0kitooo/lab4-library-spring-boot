@@ -1,26 +1,30 @@
 package com.mokitooo.model.loan;
 
+import lombok.NonNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Builder
 @ToString
 public class Loan {
     @Getter
     @EqualsAndHashCode.Include
-    private final long id;
+    private final UUID id;
     @Getter
     @EqualsAndHashCode.Include
-    private final long consumerId;
+    private final UUID consumerId;
     @Getter
     @EqualsAndHashCode.Include
-    private final long bookId;
+    private final UUID bookId;
+    @NonNull
     private final LocalDate loanDate;
     final boolean active;
 
-    public Loan(long id, long consumerId, long bookId, LocalDate loanDate) {
+    public Loan(UUID id, UUID consumerId, UUID bookId, LocalDate loanDate) {
         this(id, consumerId, bookId, loanDate, true);
     }
 

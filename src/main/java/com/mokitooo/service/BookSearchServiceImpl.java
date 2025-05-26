@@ -10,11 +10,19 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BookSearchServiceImpl implements BookSearchService {
-    private final BookRepositoryAsyncImpl bookRepositoryAsyncImpl;
+    private final BookRepositoryAsyncImpl bookRepository;
+
+    @Override
+    public List<Book> findByTitle(String title) {
+        return bookRepository.findAll()
+                .stream()
+                .filter(b -> b.matchesTitle(title))
+                .toList();
+    }
 
     @Override
     public List<Book> findByKeyword(String keyword) {
-        return bookRepositoryAsyncImpl.findAll()
+        return bookRepository.findAll()
                 .stream()
                 .filter(b -> b.titleContains(keyword))
                 .toList();

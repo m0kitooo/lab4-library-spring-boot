@@ -4,12 +4,14 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class Author {
     @EqualsAndHashCode.Include
-    private final Long id;
+    private final UUID id;
     private final String name;
     private final String surname;
 }

@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
     private final BookRepositoryAsyncImpl bookRepositoryAsyncImpl;
     private final ConsumerRepositoryAsyncImpl consumerRepositoryAsyncImpl;
-    private final Map<Long, Loan> loans = new ConcurrentHashMap<>();
+    private final Map<UUID, Loan> loans = new ConcurrentHashMap<>();
 
     @Autowired
     public BookLoanRepositoryAsyncImpl(
@@ -33,7 +33,7 @@ public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
     }
 
     @Override
-    public Loan findById(Long id) {
+    public Loan findById(UUID id) {
         return loans.get(id);
     }
 
@@ -56,11 +56,11 @@ public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
         }
     }
 
-    private boolean bookExists(Long id) {
+    private boolean bookExists(UUID id) {
         return bookRepositoryAsyncImpl.findById(id).isPresent();
     }
 
-    private boolean consumerExists(Long id) {
+    private boolean consumerExists(UUID id) {
         return consumerRepositoryAsyncImpl.findById(id).isPresent();
     }
 

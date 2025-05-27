@@ -19,6 +19,7 @@ public class Book {
     private final UUID id;
     private final Author author;
     @NonNull
+    @Getter
     final String title;
     private final LocalDate publishDate;
     private final boolean available;

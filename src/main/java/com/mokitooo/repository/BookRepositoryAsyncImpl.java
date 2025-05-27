@@ -1,16 +1,19 @@
 package com.mokitooo.repository;
 
+import com.mokitooo.dto.BookDto;
 import com.mokitooo.model.book.Book;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 @Repository
 @NoArgsConstructor
 public class BookRepositoryAsyncImpl implements BookRepository {
     private final Map<UUID, Book> books = new ConcurrentHashMap<>();
+    private final Set<String> existingBookTitles = new ConcurrentSkipListSet<>();
 
     public BookRepositoryAsyncImpl(Map<UUID, Book> books) {
         this.books.putAll(books);
@@ -27,8 +30,11 @@ public class BookRepositoryAsyncImpl implements BookRepository {
     }
 
     @Override
-    public void save(Book book) {
-        books.putIfAbsent(book.getId(), book);
+    public Book save(Book book) {
+        if (!existingBookTitles.contains(book.getTitle())) {
+            return books.putIfAbsent(book.getId(), book);
+        }
+        return null;
     }
 
     @Override

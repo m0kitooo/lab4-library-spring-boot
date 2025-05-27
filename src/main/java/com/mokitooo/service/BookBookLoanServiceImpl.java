@@ -4,7 +4,7 @@ import com.mokitooo.dto.BorrowBookDto;
 import com.mokitooo.dto.ReturnBookDto;
 import com.mokitooo.model.book.Book;
 import com.mokitooo.model.loan.Loan;
-import com.mokitooo.repository.BookLoanRepositoryAsyncImpl;
+import com.mokitooo.repository.BookLoanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import static com.mokitooo.model.loan.LoanMapper.LOAN_TO_ACTIVE;
 @Service
 @RequiredArgsConstructor
 public class BookBookLoanServiceImpl implements BookLoanService {
-    private final BookLoanRepositoryAsyncImpl bookLoanRepository;
+    private final BookLoanRepository bookLoanRepository;
     private final BookSearchService bookSearchService;
 
     @Override

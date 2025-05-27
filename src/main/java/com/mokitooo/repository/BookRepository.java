@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface BookRepository {
     Optional<Book> findById(UUID id);
     List<Book> findAll();
-    void save(Book book);
+    Book save(Book book);
     void update(Book book);
     Book delete(UUID id);
 }

@@ -1,5 +1,6 @@
 package com.mokitooo.model;
 
+import com.mokitooo.dto.AuthorDto;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -14,4 +15,8 @@ public class Author {
     private final UUID id;
     private final String name;
     private final String surname;
+
+    public AuthorDto toAuthorDto() {
+        return new AuthorDto(name, surname);
+    }
 }

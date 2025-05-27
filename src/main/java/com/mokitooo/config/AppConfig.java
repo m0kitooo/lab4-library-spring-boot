@@ -5,12 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Configuration
 public class AppConfig {
     @Bean
     public Book book() {
-        return new Book(1, null, "sigma", LocalDate.now());
+        return new Book(UUID.randomUUID(), null, "sigma", LocalDate.now());
     }
 
 //    @Bean

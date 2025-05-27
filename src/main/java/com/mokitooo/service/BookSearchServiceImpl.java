@@ -31,10 +31,11 @@ public class BookSearchServiceImpl implements BookSearchService {
     }
 
     @Override
-    public List<Book> findByKeyword(String keyword) {
+    public List<BookDto> findByKeyword(String keyword) {
         return bookRepository.findAll()
                 .stream()
                 .filter(b -> b.titleContains(keyword))
+                .map(Book::toBookDto)
                 .toList();
     }
 }

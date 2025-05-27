@@ -31,10 +31,16 @@ public class BookRepositoryAsyncImpl implements BookRepository {
 
     @Override
     public Book save(Book book) {
-        if (!existingBookTitles.contains(book.getTitle())) {
-            return books.putIfAbsent(book.getId(), book);
+        if (existingBookTitles.contains(book.getTitle())) {
+            throw new IllegalArgumentException("Book with such title already exists");
         }
-        return null;
+
+        if (books.putIfAbsent(book.getId(), book) != null) {
+            throw new IllegalArgumentException("Book already exists");
+        }
+
+        existingBookTitles.add(book.getTitle());
+        return book;
     }
 
     @Override

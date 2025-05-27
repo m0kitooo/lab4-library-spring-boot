@@ -32,10 +32,6 @@ public class Book {
         return new Book(id, author, title, publishDate, false);
     }
 
-    public Book withId(UUID id) {
-        return new Book(id, author, title, publishDate, true);
-    }
-
     public boolean matchesTitle(String title) {
         return equalsIgnoreCase(this.title, title);
     }
@@ -45,6 +41,6 @@ public class Book {
     }
 
     public BookDto toBookDto() {
-        return new BookDto(author, title, publishDate);
+        return new BookDto(author.toAuthorDto(), title, publishDate);
     }
 }

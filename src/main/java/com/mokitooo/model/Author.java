@@ -17,6 +17,6 @@ public class Author {
     private final String surname;
 
     public AuthorDto toAuthorDto() {
-        return new AuthorDto(name, surname);
+        return new AuthorDto(id, name, surname);
     }
 }

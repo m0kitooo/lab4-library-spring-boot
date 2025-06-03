@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public interface BookService {
     BookDto registerBook(CreateBookDto createBookDto);
-    BookDto deleteBook(String title);
-    void block(String title);
+    BookDto deleteBook(UUID id);
+    void block(UUID id);
 }

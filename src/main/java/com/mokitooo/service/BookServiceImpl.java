@@ -20,18 +20,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto deleteBook(String title) {
-        UUID bookId = bookSearchService.findByTitle(title).getFirst().getId();
-
-        return bookRepository.delete(bookId).toBookDto();
+    public BookDto deleteBook(UUID id) {
+        return bookRepository.delete(id).toBookDto();
     }
 
     @Override
-    public void block(String title) {
-        UUID bookId = bookSearchService.findByTitle(title).getFirst().getId();
-
+    public void block(UUID id) {
         bookRepository
-                .findById(bookId)
+                .findById(id)
                 .ifPresent(book -> bookRepository.update(book.withNoAvailable()));
     }
 }

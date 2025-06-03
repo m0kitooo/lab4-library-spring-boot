@@ -1,6 +1,6 @@
 package com.mokitooo.repository;
 
-import com.mokitooo.dto.BookDto;
+import com.mokitooo.exception.ResourceNotFoundException;
 import com.mokitooo.model.book.Book;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,6 +31,8 @@ public class BookRepositoryAsyncImpl implements BookRepository {
 
     @Override
     public Book save(Book book) {
+        book = book.withTitle(book.getTitle().trim());
+
         if (existingBookTitles.contains(book.getTitle())) {
             throw new IllegalArgumentException("Book with such title already exists");
         }
@@ -45,6 +47,8 @@ public class BookRepositoryAsyncImpl implements BookRepository {
 
     @Override
     public synchronized void update(Book book) {
+        book = book.withTitle(book.getTitle().trim());
+
         if (books.containsKey(book.getId())) {
             books.put(book.getId(), book);
         }
@@ -52,6 +56,10 @@ public class BookRepositoryAsyncImpl implements BookRepository {
 
     @Override
     public Book delete(UUID id) {
+        if (!books.containsKey(id)) {
+            throw new ResourceNotFoundException("Book with such id does not exist");
+        }
+
         return books.remove(id);
     }
 }

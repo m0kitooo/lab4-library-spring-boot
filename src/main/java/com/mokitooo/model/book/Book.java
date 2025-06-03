@@ -32,15 +32,19 @@ public class Book {
         return new Book(id, author, title, publishDate, false);
     }
 
+    public Book withTitle(String title) {
+        return new Book(id, author, title, publishDate, false);
+    }
+
     public boolean matchesTitle(String title) {
-        return equalsIgnoreCase(this.title, title);
+        return equalsIgnoreCase(this.title, title.trim());
     }
 
     public boolean titleContains(String word) {
-        return containsIgnoreCase(this.title, word);
+        return containsIgnoreCase(this.title, word.trim());
     }
 
     public BookDto toBookDto() {
-        return new BookDto(author.toAuthorDto(), title, publishDate);
+        return new BookDto(id, author.toAuthorDto(), title, publishDate, available);
     }
 }

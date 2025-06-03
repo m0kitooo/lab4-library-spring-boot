@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,8 +30,8 @@ public class BookController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteBook(@RequestBody String title) {
-        if (bookService.deleteBook(title) == null) {
+    public ResponseEntity<Void> deleteBook(@RequestParam UUID id) {
+        if (bookService.deleteBook(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.noContent().build();

@@ -1,7 +1,6 @@
 package com.mokitooo.service;
 
-import com.mokitooo.dto.BorrowBookDto;
-import com.mokitooo.dto.ReturnBookDto;
+import com.mokitooo.dto.CreateLoanDto;
 import com.mokitooo.model.book.Book;
 import com.mokitooo.model.loan.Loan;
 import com.mokitooo.repository.BookLoanRepository;
@@ -17,30 +16,20 @@ import static com.mokitooo.model.loan.LoanMapper.LOAN_TO_ACTIVE;
 @RequiredArgsConstructor
 public class BookBookLoanServiceImpl implements BookLoanService {
     private final BookLoanRepository bookLoanRepository;
-    private final BookSearchService bookSearchService;
 
     @Override
-    public void borrowBook(BorrowBookDto borrowBookDto) {
-        Book bookToBorrow = bookSearchService.findByTitle(borrowBookDto.bookTitle()).getFirst();
-
-        bookLoanRepository.save(
-                Loan
-                        .builder()
-                        .id(UUID.randomUUID())
-                        .bookId(bookToBorrow.getId())
-                        .consumerId(borrowBookDto.consumer().getId())
-                        .loanDate(LocalDate.now())
-                        .active(true)
-                        .build()
-        );
+    public void borrowBook(CreateLoanDto createLoanDto) {
+        bookLoanRepository.save(new Loan(
+                UUID.randomUUID(),
+                createLoanDto.consumerId(),
+                createLoanDto.bookId(),
+                LocalDate.now()
+        ));
     }
 
     @Override
-    public void returnBook(ReturnBookDto returnBookDto) {
-        Book book = bookSearchService.findByTitle(returnBookDto.title()).getFirst();
-        UUID loanId = bookLoanRepository.findById(book.getId()).getId();
-
-        bookLoanRepository.update(bookLoanRepository.findById(loanId).withInactive());
+    public void returnBook(UUID id) {
+        bookLoanRepository.update(bookLoanRepository.findById(id).withInactive());
     }
 
     @Override

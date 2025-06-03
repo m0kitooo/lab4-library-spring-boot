@@ -1,10 +1,11 @@
 package com.mokitooo.service;
 
-import com.mokitooo.dto.BorrowBookDto;
-import com.mokitooo.dto.ReturnBookDto;
+import com.mokitooo.dto.CreateLoanDto;
+
+import java.util.UUID;
 
 public interface BookLoanService {
-    void borrowBook(BorrowBookDto borrowBookDto);
-    void returnBook(ReturnBookDto returnBookDto);
+    void borrowBook(CreateLoanDto createLoanDto);
+    void returnBook(UUID id);
     boolean areAllBooksReturned();
 }

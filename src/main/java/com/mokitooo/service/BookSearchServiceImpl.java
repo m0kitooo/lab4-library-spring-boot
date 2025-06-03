@@ -23,10 +23,12 @@ public class BookSearchServiceImpl implements BookSearchService {
     }
 
     @Override
-    public List<Book> findByTitle(String title) {
-        return bookRepository.findAll()
+    public List<BookDto> findByTitle(String title) {
+        return bookRepository
+                .findAll()
                 .stream()
                 .filter(b -> b.matchesTitle(title))
+                .map(Book::toBookDto)
                 .toList();
     }
 

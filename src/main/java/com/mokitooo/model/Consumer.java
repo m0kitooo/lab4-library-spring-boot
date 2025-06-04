@@ -1,5 +1,6 @@
 package com.mokitooo.model;
 
+import com.mokitooo.dto.ConsumerDto;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,4 +17,8 @@ public class Consumer {
     private final UUID id;
     private final String name;
     private final String surname;
+
+    public ConsumerDto toDto() {
+        return new ConsumerDto(id, name, surname);
+    }
 }

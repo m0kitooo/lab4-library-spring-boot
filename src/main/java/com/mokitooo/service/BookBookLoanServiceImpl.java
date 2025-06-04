@@ -29,7 +29,7 @@ public class BookBookLoanServiceImpl implements BookLoanService {
 
     @Override
     public void returnBook(UUID id) {
-        bookLoanRepository.update(bookLoanRepository.findById(id).withInactive());
+        bookLoanRepository.update(bookLoanRepository.findById(id).orElseThrow().withInactive());
     }
 
     @Override

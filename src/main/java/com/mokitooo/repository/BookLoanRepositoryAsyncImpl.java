@@ -1,5 +1,6 @@
 package com.mokitooo.repository;
 
+import com.mokitooo.model.Consumer;
 import com.mokitooo.model.loan.Loan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -9,32 +10,32 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
-    private final BookRepositoryAsyncImpl bookRepositoryAsyncImpl;
-    private final ConsumerRepositoryAsyncImpl consumerRepositoryAsyncImpl;
+    private final BookRepository bookRepository;
+    private final ConsumerRepository consumerRepository;
     private final Map<UUID, Loan> loans = new ConcurrentHashMap<>();
 
     @Autowired
     public BookLoanRepositoryAsyncImpl(
-            BookRepositoryAsyncImpl bookRepositoryAsyncImpl,
-            ConsumerRepositoryAsyncImpl consumerRepositoryAsyncImpl
+            BookRepositoryAsyncImpl bookRepository,
+            ConsumerRepositoryAsyncImpl consumerRepository
     ) {
-        this.bookRepositoryAsyncImpl = bookRepositoryAsyncImpl;
-        this.consumerRepositoryAsyncImpl = consumerRepositoryAsyncImpl;
+        this.bookRepository = bookRepository;
+        this.consumerRepository = consumerRepository;
     }
 
     public BookLoanRepositoryAsyncImpl(
             List<Loan> loans,
-            BookRepositoryAsyncImpl bookRepositoryAsyncImpl,
-            ConsumerRepositoryAsyncImpl consumerRepositoryAsyncImpl
+            BookRepositoryAsyncImpl bookRepository,
+            ConsumerRepositoryAsyncImpl consumerRepository
     ) {
-        this.bookRepositoryAsyncImpl = bookRepositoryAsyncImpl;
-        this.consumerRepositoryAsyncImpl = consumerRepositoryAsyncImpl;
+        this.bookRepository = bookRepository;
+        this.consumerRepository = consumerRepository;
         loans.forEach(this::save);
     }
 
     @Override
-    public Loan findById(UUID id) {
-        return loans.get(id);
+    public Optional<Loan> findById(UUID id) {
+        return Optional.ofNullable(loans.get(id));
     }
 
     @Override
@@ -56,12 +57,28 @@ public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
         }
     }
 
+    @Override
+    public List<Consumer> findConsumersByBookId(UUID bookId) {
+        List<UUID> consumerIdsByBook = loans
+                .values()
+                .stream()
+                .filter(l -> l.getBookId().equals(bookId))
+                .map(Loan::getConsumerId)
+                .toList();
+
+        return consumerRepository
+                .findAll()
+                .stream()
+                .filter(consumer -> consumerIdsByBook.contains(consumer.getId()))
+                .toList();
+    }
+
     private boolean bookExists(UUID id) {
-        return bookRepositoryAsyncImpl.findById(id).isPresent();
+        return bookRepository.findById(id).isPresent();
     }
 
     private boolean consumerExists(UUID id) {
-        return consumerRepositoryAsyncImpl.findById(id).isPresent();
+        return consumerRepository.findById(id).isPresent();
     }
 
     private boolean bookAndConsumerExist(Loan loan) {

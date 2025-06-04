@@ -25,9 +25,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void block(UUID id) {
+    public void block(UUID bookId, UUID authorId) {
         bookRepository
-                .findById(id)
+                .findById(bookId)
                 .ifPresent(book -> bookRepository.update(book.withNoAvailable()));
     }
 }

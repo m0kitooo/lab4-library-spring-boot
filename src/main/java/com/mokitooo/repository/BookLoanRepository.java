@@ -1,7 +1,7 @@
 package com.mokitooo.repository;
 
 import com.mokitooo.model.Consumer;
-import com.mokitooo.model.loan.Loan;
+import com.mokitooo.model.loan.BookLoan;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,9 +9,9 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface BookLoanRepository {
-    Optional<Loan> findById(UUID id);
-    Set<Loan> findAll();
+    Optional<BookLoan> findById(UUID id);
+    Set<BookLoan> findAll();
     List<Consumer> findConsumersByBookId(UUID bookId);
-    void save(Loan loan);
-    void update(Loan loan);
+    void save(BookLoan bookLoan);
+    void update(BookLoan bookLoan);
 }

@@ -1,8 +1,7 @@
 package com.mokitooo.service;
 
 import com.mokitooo.dto.CreateLoanDto;
-import com.mokitooo.model.book.Book;
-import com.mokitooo.model.loan.Loan;
+import com.mokitooo.model.loan.BookLoan;
 import com.mokitooo.repository.BookLoanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static com.mokitooo.model.loan.LoanMapper.LOAN_TO_ACTIVE;
+import static com.mokitooo.model.loan.BookLoanMapper.LOAN_TO_ACTIVE;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +18,7 @@ public class BookBookLoanServiceImpl implements BookLoanService {
 
     @Override
     public void borrowBook(CreateLoanDto createLoanDto) {
-        bookLoanRepository.save(new Loan(
+        bookLoanRepository.save(new BookLoan(
                 UUID.randomUUID(),
                 createLoanDto.consumerId(),
                 createLoanDto.bookId(),

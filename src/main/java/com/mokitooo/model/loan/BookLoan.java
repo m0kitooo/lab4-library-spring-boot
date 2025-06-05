@@ -10,7 +10,7 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 @ToString
-public class Loan {
+public class BookLoan {
     @Getter
     @EqualsAndHashCode.Include
     private final UUID id;
@@ -24,11 +24,11 @@ public class Loan {
     private final LocalDate loanDate;
     final boolean active;
 
-    public Loan(UUID id, UUID consumerId, UUID bookId, LocalDate loanDate) {
+    public BookLoan(UUID id, UUID consumerId, UUID bookId, LocalDate loanDate) {
         this(id, consumerId, bookId, loanDate, true);
     }
 
-    public Loan withInactive() {
-        return new Loan(id, consumerId, bookId, loanDate, false);
+    public BookLoan withInactive() {
+        return new BookLoan(id, consumerId, bookId, loanDate, false);
     }
 }

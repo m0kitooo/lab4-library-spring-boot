@@ -1,18 +1,19 @@
 package com.mokitooo.repository;
 
 import com.mokitooo.model.Consumer;
-import com.mokitooo.model.loan.Loan;
+import com.mokitooo.model.loan.BookLoan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Repository
 public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
     private final BookRepository bookRepository;
     private final ConsumerRepository consumerRepository;
-    private final Map<UUID, Loan> loans = new ConcurrentHashMap<>();
+    private final Map<UUID, BookLoan> loans = new ConcurrentHashMap<>();
 
     @Autowired
     public BookLoanRepositoryAsyncImpl(
@@ -24,47 +25,47 @@ public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
     }
 
     public BookLoanRepositoryAsyncImpl(
-            List<Loan> loans,
+            List<BookLoan> bookLoans,
             BookRepositoryAsyncImpl bookRepository,
             ConsumerRepositoryAsyncImpl consumerRepository
     ) {
         this.bookRepository = bookRepository;
         this.consumerRepository = consumerRepository;
-        loans.forEach(this::save);
+        bookLoans.forEach(this::save);
     }
 
     @Override
-    public Optional<Loan> findById(UUID id) {
+    public Optional<BookLoan> findById(UUID id) {
         return Optional.ofNullable(loans.get(id));
     }
 
     @Override
-    public Set<Loan> findAll() {
+    public Set<BookLoan> findAll() {
         return new HashSet<>(loans.values());
     }
 
     @Override
-    public void save(Loan loan) {
-        if (bookAndConsumerExist(loan)) {
-            loans.putIfAbsent(loan.getId(), loan);
+    public void save(BookLoan bookLoan) {
+        if (bookAndConsumerExist(bookLoan)) {
+            loans.putIfAbsent(bookLoan.getId(), bookLoan);
         }
     }
 
     @Override
-    public void update(Loan loan) {
-        if (bookAndConsumerExist(loan) && loans.containsKey(loan.getId())) {
-            loans.put(loan.getId(), loan);
+    public void update(BookLoan bookLoan) {
+        if (bookAndConsumerExist(bookLoan) && loans.containsKey(bookLoan.getId())) {
+            loans.put(bookLoan.getId(), bookLoan);
         }
     }
 
     @Override
     public List<Consumer> findConsumersByBookId(UUID bookId) {
-        List<UUID> consumerIdsByBook = loans
+        Set<UUID> consumerIdsByBook = loans
                 .values()
                 .stream()
                 .filter(l -> l.getBookId().equals(bookId))
-                .map(Loan::getConsumerId)
-                .toList();
+                .map(BookLoan::getConsumerId)
+                .collect(Collectors.toSet());
 
         return consumerRepository
                 .findAll()
@@ -81,7 +82,7 @@ public class BookLoanRepositoryAsyncImpl implements BookLoanRepository {
         return consumerRepository.findById(id).isPresent();
     }
 
-    private boolean bookAndConsumerExist(Loan loan) {
-        return bookExists(loan.getBookId()) && consumerExists(loan.getConsumerId());
+    private boolean bookAndConsumerExist(BookLoan bookLoan) {
+        return bookExists(bookLoan.getBookId()) && consumerExists(bookLoan.getConsumerId());
     }
 }
